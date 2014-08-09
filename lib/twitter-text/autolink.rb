@@ -3,7 +3,7 @@
 require 'set'
 require 'twitter-text/hash_helper'
 
-module Twitter
+module TwitterText
   # A module for including Tweet auto-linking in a class. The primary use of this is for helpers/views so they can auto-link
   # usernames, lists, hashtags and URLs.
   module Autolink extend self
@@ -64,7 +64,7 @@ module Twitter
       options[:html_attrs] = extract_html_attrs_from_options!(options)
       options[:html_attrs][:rel] ||= "nofollow" unless options[:suppress_no_follow]
 
-      Twitter::Rewriter.rewrite_entities(text.dup, entities) do |entity, chars|
+      TwitterText::Rewriter.rewrite_entities(text.dup, entities) do |entity, chars|
         if entity[:url]
           link_to_url(entity, chars, options, &block)
         elsif entity[:hashtag]
@@ -329,7 +329,7 @@ module Twitter
       hashtag = yield(hashtag) if block_given?
       hashtag_class = options[:hashtag_class]
 
-      if hashtag.match Twitter::Regex::REGEXEN[:rtl_chars]
+      if hashtag.match TwitterText::Regex::REGEXEN[:rtl_chars]
         hashtag_class += ' rtl'
       end
 
@@ -401,7 +401,7 @@ module Twitter
       tagged_symbol = options[:symbol_tag] ? "<#{options[:symbol_tag]}>#{symbol}</#{options[:symbol_tag]}>" : symbol
       text = html_escape(text)
       tagged_text = options[:text_with_symbol_tag] ? "<#{options[:text_with_symbol_tag]}>#{text}</#{options[:text_with_symbol_tag]}>" : text
-      if options[:username_include_symbol] || symbol !~ Twitter::Regex::REGEXEN[:at_signs]
+      if options[:username_include_symbol] || symbol !~ TwitterText::Regex::REGEXEN[:at_signs]
         "#{link_to_text(entity, tagged_symbol + tagged_text, href, attributes, options)}"
       else
         "#{tagged_symbol}#{link_to_text(entity, tagged_text, href, attributes, options)}"
