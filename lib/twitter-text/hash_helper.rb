@@ -1,4 +1,4 @@
-module Twitter
+module TwitterText
   module HashHelper
     # Return a new hash with all keys converted to symbols, as long as
     # they respond to +to_sym+.
